@@ -1,1 +1,35 @@
 https://www.themealdb.com/api.php
+
+
+get recipe by name:
+	https://www.themealdb.com/api/json/v1/1/search.php?s=Rice
+
+get list recipes by first letter
+	 www.themealdb.com/api/json/v1/1/search.php?f=a
+get random recipe:
+	www.themealdb.com/api/json/v1/1/random.php
+
+get list all recipes categories
+	www.themealdb.com/api/json/v1/1/categories.php
+Filter by Category
+www.themealdb.com/api/json/v1/1/filter.php?c=Seafood
+
+Filter by main ingredient
+	www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast
+
+Lookup full meal details by id (usar la id que devuelve Filter by main ingredient)
+	www.themealdb.com/api/json/v1/1/lookup.php?i=52772
+
+
+App:
+
+Arriba muestra recetas
+
+abajo spinner con las categorias y segun la que pulses muestra unas recetas
+	get list all recipes categories
+	www.themealdb.com/api/json/v1/1/categories.php
+
+	Filter by Category
+	www.themealdb.com/api/json/v1/1/filter.php?c=Seafood
+
+boton receta randon, muestra receta random
