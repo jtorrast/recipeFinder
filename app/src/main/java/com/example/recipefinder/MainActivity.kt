@@ -3,6 +3,8 @@ package com.example.recipefinder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.recipefinder.databinding.ActivityMainBinding
@@ -21,48 +23,64 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val call: Response<Models.ApiResponse> = getRetrofit()
-                    .create(APIService::class.java).getCategories("categories.php")
 
-                runOnUiThread {
-                    if (call.isSuccessful) {
-                        val apiResponse: Models.ApiResponse? = call.body()
-                        if (apiResponse != null) {
-                            val categories: List<Models.Category>? = apiResponse.categories
-                            if (categories != null && categories.isNotEmpty()) {
-                                fillSpinner(categories)
-                            } else {
-                                // Handle the case where categories is empty or null
-                                showError("No se encontraron categorías válidas")
-                            }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val call: Response<Models.ApiResponse> = getRetrofit()
+                .create(APIService::class.java).getCategories("categories.php")
+
+            runOnUiThread {
+                if (call.isSuccessful) {
+                    val apiResponse: Models.ApiResponse? = call.body()
+
+                    if (apiResponse != null) {
+                        val categories: List<Models.Category>? = apiResponse.categories
+
+                        if (categories != null && categories.isNotEmpty()) {
+                            fillSpinner(categories)
                         } else {
-                            showError("Respuesta del servidor nula")
+                            showError("No se encontraron categorías válidas")
                         }
                     } else {
-                        showError("Error en la solicitud al servidor")
+                        showError("Respuesta del servidor nula")
                     }
+                } else {
+                    showError("Error en la solicitud al servidor")
                 }
-            } catch (e: Exception) {
-                // Handle exceptions, e.g., network errors
-                showError("Error al obtener las categorías: ${e.message}")
             }
         }
 
+        /*Evento que para cuando seleccionemos un item del spiner envie el string*/
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 
+                //ahora falta enviar el string para que complete la url, tendremos que hacer otra consulta a la api para que muestre las recetas
+
+                val tipo = parent?.getItemAtPosition(position) as? String
+
+                showError(tipo!!)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
 
 
     }
+
 
     private fun fillSpinner(categories: List<Models.Category>) {
 
         Log.e("Tamaño array categories", categories.size.toString())
 
-
-
-        val categoryNames = categories
-            .mapNotNull { it.categoria?.takeIf { it.isNotBlank() } }
+        val categoryNames = categories.map { it.categoria }
 
 
         if (categoryNames.isNotEmpty()) {
