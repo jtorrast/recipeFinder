@@ -21,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val mealsList = mutableListOf<ModelsMeals.Meal>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                 //ahora falta enviar el string para que complete la url, tendremos que hacer otra consulta a la api para que muestre las recetas
 
                 val tipo = parent?.getItemAtPosition(position) as? String
+                mealsList.clear()
 
                 getMeals(tipo)
 
@@ -109,10 +111,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun getRecipies(meals: List<ModelsMeals.Meal>) {
         val nameMeal = meals.map { it.mealName }
+        meals.forEach { meals->
+            val nameMeal = meals.mealName
+            val img = meals.image
+            val id = meals.idMeal
 
-        if (nameMeal.isNotEmpty()) {
-            nameMeal.forEach { meal ->
+            mealsList.add(ModelsMeals.Meal(nameMeal, img, id))
+        }
+
+        if (mealsList.isNotEmpty()) {
+            mealsList.forEach { meal ->
                 println(meal)
+                //enviar
             }
         }
     }
