@@ -7,7 +7,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.example.recipefinder.api.APIService
 import com.example.recipefinder.databinding.ActivityMainBinding
+import com.example.recipefinder.models.ModelsCategories
+import com.example.recipefinder.models.ModelsMeals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,15 +29,15 @@ class MainActivity : AppCompatActivity() {
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            val call: Response<Models.ApiResponse> = getRetrofit()
+            val call: Response<ModelsCategories.ApiResponseCategories> = getRetrofit()
                 .create(APIService::class.java).getCategories("categories.php")
 
             runOnUiThread {
                 if (call.isSuccessful) {
-                    val apiResponse: Models.ApiResponse? = call.body()
+                    val apiResponseCategories: ModelsCategories.ApiResponseCategories? = call.body()
 
-                    if (apiResponse != null) {
-                        val categories: List<Models.Category>? = apiResponse.categories
+                    if (apiResponseCategories != null) {
+                        val categories: List<ModelsCategories.Category>? = apiResponseCategories.categories
 
                         if (categories != null && categories.isNotEmpty()) {
                             fillSpinner(categories)
@@ -63,7 +66,9 @@ class MainActivity : AppCompatActivity() {
 
                 val tipo = parent?.getItemAtPosition(position) as? String
 
-                showError(tipo!!)
+                getMeals(tipo)
+
+                //showError(tipo!!)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -75,8 +80,45 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun getMeals(category: String?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val call: Response<ModelsMeals.ApiResponseMeals> = getRetrofit()
+                .create(APIService::class.java).getMealsByCategory("filter.php?c=$category")
 
-    private fun fillSpinner(categories: List<Models.Category>) {
+            runOnUiThread {
+                if (call.isSuccessful){
+                    val apiResponseMeals: ModelsMeals.ApiResponseMeals? = call.body()
+
+                    if (apiResponseMeals != null) {
+                        val meals: List<ModelsMeals.Meal>? = apiResponseMeals.meals
+
+                        if (meals != null && meals.isNotEmpty()){
+                            getRecipies(meals)
+                        }else{
+                            showError("No hay recetas")
+                        }
+                    }else{
+                        showError("Respuesta del servidor nula")
+                    }
+                }else{
+                    showError("Error en la solicitud al servidor")
+                }
+            }
+        }
+    }
+
+    private fun getRecipies(meals: List<ModelsMeals.Meal>) {
+        val nameMeal = meals.map { it.mealName }
+
+        if (nameMeal.isNotEmpty()) {
+            nameMeal.forEach { meal ->
+                println(meal)
+            }
+        }
+    }
+
+
+    private fun fillSpinner(categories: List<ModelsCategories.Category>) {
 
         Log.e("Tamaño array categories", categories.size.toString())
 

@@ -1,10 +1,10 @@
-package com.example.recipefinder
+package com.example.recipefinder.models
 
 import com.google.gson.annotations.SerializedName
 
-class Models {
+class ModelsCategories {
 
-    data class ApiResponse(
+    data class ApiResponseCategories(
         val categories: List<Category>
     )
 
