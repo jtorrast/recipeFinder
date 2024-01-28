@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), MealListener {
     override fun onmealSelected(meal: MealPojo) {
         Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
 
-        val frgMealDetail = MealDetailFragment()
+        val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
 
         supportFragmentManager.beginTransaction()
             .add(R.id.containerMain, frgMealDetail)

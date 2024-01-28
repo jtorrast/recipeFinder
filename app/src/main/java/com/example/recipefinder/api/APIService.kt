@@ -13,6 +13,9 @@ interface APIService {
     @GET
     suspend fun getMealsByCategory(@Url url: String): Response<ModelsMeals.ApiResponseMeals>
 
+    @GET
+    suspend fun getMealDetail(@Url url: String): Response<ModelsMeals.ApiResponseMealDetail>
+
 
 
 }

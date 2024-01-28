@@ -8,12 +8,17 @@ class ModelsMeals {
         val meals: List<Meal>
     )
 
+    data class ApiResponseMealDetail(
+        val mealDetail: MealDetail
+    )
+
     data class Meal(
         @SerializedName("strMeal")
         val mealName: String,
 
         @SerializedName("strMealThumb")
         val image: String,
+
 
         @SerializedName("idMeal")
         val idMeal: Int
@@ -24,4 +29,14 @@ class ModelsMeals {
         }
     }
 
+    data class MealDetail(
+        @SerializedName("strMeal")
+        val mealName: String,
+
+        @SerializedName("strMealThumb")
+        val image: String,
+
+        @SerializedName("strYoutube")
+        val youtubeLink: String
+    )
 }
