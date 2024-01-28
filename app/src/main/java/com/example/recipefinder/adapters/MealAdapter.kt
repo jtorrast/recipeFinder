@@ -40,17 +40,17 @@ class MealAdapter(private val meals: MutableList<MealPojo>, private val listener
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val meal = meals.get(position)
 
-        holder.apply{
+        with(holder){
             setListener(meal)
             binding.tvName.text= meal.getMealName()
-            Picasso.get().load(meal.getImage()).into(binding.imgPhoto)//usando picaso
+            //Picasso.get().load(meal.getImage()).into(binding.imgPhoto)//usando picaso
 
             //Glide
-           /* Glide.with(context)
-                .load(meal.image)
+           Glide.with(context)
+                .load(meal.getImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
-                .into(binding.imgPhoto)*/
+                .into(binding.imgPhoto)
 
         }
     }

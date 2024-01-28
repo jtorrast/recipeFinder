@@ -33,30 +33,35 @@ class MainActivity : AppCompatActivity(), MealListener {
 
 
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val call: Response<ModelsCategories.ApiResponseCategories> = getRetrofit()
-                .create(APIService::class.java).getCategories("categories.php")
+        if (mealsList.isEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val call: Response<ModelsCategories.ApiResponseCategories> = getRetrofit()
+                    .create(APIService::class.java).getCategories("categories.php")
 
-            runOnUiThread {
-                if (call.isSuccessful) {
-                    val apiResponseCategories: ModelsCategories.ApiResponseCategories? = call.body()
+                runOnUiThread {
+                    if (call.isSuccessful) {
+                        val apiResponseCategories: ModelsCategories.ApiResponseCategories? = call.body()
 
-                    if (apiResponseCategories != null) {
-                        val categories: List<ModelsCategories.Category>? = apiResponseCategories.categories
+                        if (apiResponseCategories != null) {
+                            val categories: List<ModelsCategories.Category>? = apiResponseCategories.categories
 
-                        if (categories != null && categories.isNotEmpty()) {
-                            fillSpinner(categories)
+                            if (categories != null && categories.isNotEmpty()) {
+
+                                    fillSpinner(categories)
+
+                            } else {
+                                showError("No se encontraron categorías válidas")
+                            }
                         } else {
-                            showError("No se encontraron categorías válidas")
+                            showError("Respuesta del servidor nula")
                         }
                     } else {
-                        showError("Respuesta del servidor nula")
+                        showError("Error en la solicitud al servidor")
                     }
-                } else {
-                    showError("Error en la solicitud al servidor")
                 }
             }
         }
+
 
         /*Evento que para cuando seleccionemos un item del spiner envie el string*/
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
