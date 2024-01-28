@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.recipefinder.R
 import com.example.recipefinder.api.APIService
 import com.example.recipefinder.databinding.ActivityMainBinding
+import com.example.recipefinder.fragments.MealDetailFragment
 import com.example.recipefinder.fragments.MealListener
 import com.example.recipefinder.fragments.MealsFragment
 import com.example.recipefinder.models.ModelsCategories
@@ -178,6 +179,13 @@ class MainActivity : AppCompatActivity(), MealListener {
 
     override fun onmealSelected(meal: MealPojo) {
         Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
+
+        val frgMealDetail = MealDetailFragment()
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.containerMain, frgMealDetail)
+            .addToBackStack(null)
+            .commit()
     }
 
 

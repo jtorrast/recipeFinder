@@ -3,12 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MealDetailFragment">
+    tools:context=".fragments.MealDetailFragment"
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginHorizontal="16dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgMealDetail"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <TextView
+            android:id="@+id/tvTitleMealDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bucatini with mushrooms &amp; sausage"
+            android:textSize="30sp"
+            android:textStyle="normal"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enlace de youtube"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:textIsSelectable="true"
+            android:onClick="openYoutubeVideo"/>
+
+    </LinearLayout>
+
 
 </FrameLayout>
