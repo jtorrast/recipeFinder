@@ -1,4 +1,4 @@
-package com.example.recipefinder
+package com.example.recipefinder.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,10 +7,14 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.example.recipefinder.R
 import com.example.recipefinder.api.APIService
 import com.example.recipefinder.databinding.ActivityMainBinding
+import com.example.recipefinder.fragments.MealListener
+import com.example.recipefinder.fragments.MealsFragment
 import com.example.recipefinder.models.ModelsCategories
 import com.example.recipefinder.models.ModelsMeals
+import com.example.recipefinder.pojos.MealPojo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,10 +22,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MealListener {
 
     private lateinit var binding: ActivityMainBinding
-    private val mealsList = mutableListOf<ModelsMeals.Meal>()
+    private val mealsList = mutableListOf<MealPojo>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -116,7 +120,14 @@ class MainActivity : AppCompatActivity() {
             val img = meals.image
             val id = meals.idMeal
 
-            mealsList.add(ModelsMeals.Meal(nameMeal, img, id))
+            mealsList.add(MealPojo(nameMeal, img, id))
+
+            val frgMeals = MealsFragment.newInstance(mealsList)
+
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainerView, frgMeals).commit()
+            frgMeals.setListener(this)
+
         }
 
         if (mealsList.isNotEmpty()) {
@@ -158,6 +169,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showError(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onmealSelected(meal: MealPojo) {
+        Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
     }
 
 
