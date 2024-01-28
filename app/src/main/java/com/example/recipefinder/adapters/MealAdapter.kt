@@ -40,7 +40,7 @@ class MealAdapter(private val meals: MutableList<MealPojo>, private val listener
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val meal = meals.get(position)
 
-        with(holder){
+        holder.apply{
             setListener(meal)
             binding.tvName.text= meal.getMealName()
             Picasso.get().load(meal.getImage()).into(binding.imgPhoto)//usando picaso
