@@ -26,12 +26,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_MEAL_ID = "MealId"
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MealDetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MealDetailFragment : Fragment() {
 
     private var mealId: String? = null
@@ -127,7 +121,6 @@ class MealDetailFragment : Fragment() {
         }
     }
 
-
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://www.themealdb.com/api/json/v1/1/")
@@ -138,7 +131,6 @@ class MealDetailFragment : Fragment() {
     private fun showError(mensaje: String) {
         Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
     }
-
 
     companion object {
         @JvmStatic
