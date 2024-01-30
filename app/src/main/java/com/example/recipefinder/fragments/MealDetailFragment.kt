@@ -9,8 +9,10 @@ import android.widget.Toast
 import com.example.recipefinder.R
 import com.example.recipefinder.activities.MainActivity
 import com.example.recipefinder.api.APIService
+import com.example.recipefinder.database.RecipeApplication
 import com.example.recipefinder.databinding.FragmentMealDetailBinding
 import com.example.recipefinder.databinding.FragmentMealsBinding
+import com.example.recipefinder.entities.RecipeEntity
 import com.example.recipefinder.models.ModelsMeals
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -31,8 +33,11 @@ private const val ARG_MEAL_ID = "MealId"
  * create an instance of this fragment.
  */
 class MealDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var mealId: String? = null
+    private var mealName: String? = null
+    private var image: String? = null
+    private var youtubeLink: String? = null
 
 
     private lateinit var binding: FragmentMealDetailBinding
@@ -75,9 +80,12 @@ class MealDetailFragment : Fragment() {
                     val mealDetail: List<ModelsMeals.MealDetail>? = meal?.mealDetail
 
                     mealDetail?.forEach { detail->
-                        binding.tvTitleMealDetail.text = detail.mealName
-                        Picasso.get().load(detail.image).fit().into(binding.imgMealDetail)
-                        binding.tvYoutube.text = detail.youtubeLink
+                        mealName = detail.mealName
+                        image = detail.image
+                        youtubeLink = detail.youtubeLink
+                        binding.tvTitleMealDetail.text = mealName
+                        Picasso.get().load(image).fit().into(binding.imgMealDetail)
+                        binding.tvYoutube.text = youtubeLink
                     }
                 }
             }
@@ -91,10 +99,31 @@ class MealDetailFragment : Fragment() {
         *   guardamos la receta en la bd
         * }
         * */
-        if (binding.checkRecipe.isChecked) {
-            showError("I like")
-        } else {
-            showError("No check")
+        mealId?.let { id ->
+            val currentRecipe = RecipeEntity(id.toInt(), mealName, image, youtubeLink)
+
+            Thread {
+                context?.let { safeContext ->
+                    val recipesDao = RecipeApplication.database.recipesDao()
+                    val recipeExist = recipesDao.getRecipeById(id.toInt())
+
+                    if (binding.checkRecipe.isChecked && recipeExist == null) {
+                        recipesDao.addRecipe(currentRecipe)
+                        mActivity?.runOnUiThread {
+                            Toast.makeText(safeContext, "Receta añadida", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (!binding.checkRecipe.isChecked && recipeExist != null) {
+                        recipesDao.deleteRecipe(currentRecipe)
+                        mActivity?.runOnUiThread {
+                            Toast.makeText(safeContext, "Receta eliminada de favoritos", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        println("Receta, " + if (binding.checkRecipe.isChecked) "ya existe" else "sigue sin gustar")
+                    }
+                } ?: run {
+                    showError("Contexto nulo al intentar añadir/eliminar la receta")
+                }
+            }.start()
         }
     }
 
