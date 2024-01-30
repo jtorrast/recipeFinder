@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical">
 
         <ImageView
@@ -22,17 +23,25 @@
             android:id="@+id/tvTitleMealDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bucatini with mushrooms &amp; sausage"
+            android:layout_marginTop="8dp"
             android:textSize="30sp"
             android:textStyle="normal"/>
         <TextView
+            android:id="@+id/tvYoutube"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Enlace de youtube"
             android:autoLink="web"
             android:linksClickable="true"
             android:textIsSelectable="true"
             android:onClick="openYoutubeVideo"/>
+
+        <CheckBox
+            android:id="@+id/checkRecipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I like it!"/>
 
     </LinearLayout>
 

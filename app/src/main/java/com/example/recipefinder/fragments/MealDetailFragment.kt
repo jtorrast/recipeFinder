@@ -12,6 +12,7 @@ import com.example.recipefinder.api.APIService
 import com.example.recipefinder.databinding.FragmentMealDetailBinding
 import com.example.recipefinder.databinding.FragmentMealsBinding
 import com.example.recipefinder.models.ModelsMeals
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +52,6 @@ class MealDetailFragment : Fragment() {
 
         binding = FragmentMealDetailBinding.inflate(inflater,container, false)
         mActivity = activity as? MainActivity
-
         getRecipe(mealId!!)
 
         // Inflate the layout for this fragment
@@ -60,32 +60,42 @@ class MealDetailFragment : Fragment() {
 
     private fun getRecipe(idMeal: String){
 
-        //var recipe: ModelsMeals.MealDetail? = null
+        var recipe: ModelsMeals.MealDetail? = null
 
-        /*println("METODO GETRECIPE")
 
         CoroutineScope(Dispatchers.IO).launch {
             val call: Response<ModelsMeals.ApiResponseMealDetail> = getRetrofit()
                 .create(APIService::class.java).getMealDetail("lookup.php?i=$idMeal")
 
+            val meal: ModelsMeals.ApiResponseMealDetail? = call.body()
 
             mActivity?.runOnUiThread {
                 if (call.isSuccessful) {
-                    println("CALLL->> ${call.isSuccessful}")
-                    val apiResponseMealDetail: ModelsMeals.ApiResponseMealDetail? = call.body()
 
-                    if (apiResponseMealDetail != null) {
-                        //recipe = apiResponseMealDetail.mealDetail
-                        println(recipe)
-                        if (recipe != null) {
-                            //binding.tvTitleMealDetail.text = recipe?.mealName
-                        } else {
-                            showError("Receta es nula")
-                        }
+                    val mealDetail: List<ModelsMeals.MealDetail>? = meal?.mealDetail
+
+                    mealDetail?.forEach { detail->
+                        binding.tvTitleMealDetail.text = detail.mealName
+                        Picasso.get().load(detail.image).fit().into(binding.imgMealDetail)
+                        binding.tvYoutube.text = detail.youtubeLink
                     }
                 }
             }
-        }*/
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        /*
+        * Comprobar si isChecked{
+        *   guardamos la receta en la bd
+        * }
+        * */
+        if (binding.checkRecipe.isChecked) {
+            showError("I like")
+        } else {
+            showError("No check")
+        }
     }
 
 

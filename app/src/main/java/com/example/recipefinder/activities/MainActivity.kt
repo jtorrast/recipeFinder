@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity(), MealListener {
     override fun onmealSelected(meal: MealPojo) {
         //Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
 
-        val idMeal = meal.getIdMeal().toString()
+        /*val idMeal = meal.getIdMeal().toString()
 
         CoroutineScope(Dispatchers.IO).launch {
             val call: Response<ModelsMeals.ApiResponseMealDetail> = getRetrofit()
@@ -201,15 +201,15 @@ class MainActivity : AppCompatActivity(), MealListener {
                 }
             }
 
-        }
+        }*/
 
 
-        /*val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
+        val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
 
         supportFragmentManager.beginTransaction()
             .add(R.id.containerMain, frgMealDetail)
             .addToBackStack(null)
-            .commit()*/
+            .commit()
     }
 
 
