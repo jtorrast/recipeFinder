@@ -9,7 +9,8 @@ class ModelsMeals {
     )
 
     data class ApiResponseMealDetail(
-        val mealDetail: MealDetail
+        @SerializedName("meals")
+        val mealDetail: List<MealDetail>
     )
 
     data class Meal(

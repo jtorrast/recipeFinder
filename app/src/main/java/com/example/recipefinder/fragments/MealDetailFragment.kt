@@ -60,9 +60,9 @@ class MealDetailFragment : Fragment() {
 
     private fun getRecipe(idMeal: String){
 
-        var recipe: ModelsMeals.MealDetail? = null
+        //var recipe: ModelsMeals.MealDetail? = null
 
-        println("METODO GETRECIPE")
+        /*println("METODO GETRECIPE")
 
         CoroutineScope(Dispatchers.IO).launch {
             val call: Response<ModelsMeals.ApiResponseMealDetail> = getRetrofit()
@@ -75,17 +75,17 @@ class MealDetailFragment : Fragment() {
                     val apiResponseMealDetail: ModelsMeals.ApiResponseMealDetail? = call.body()
 
                     if (apiResponseMealDetail != null) {
-                        recipe = apiResponseMealDetail.mealDetail
+                        //recipe = apiResponseMealDetail.mealDetail
                         println(recipe)
                         if (recipe != null) {
-                            binding.tvTitleMealDetail.text = recipe?.mealName
+                            //binding.tvTitleMealDetail.text = recipe?.mealName
                         } else {
                             showError("Receta es nula")
                         }
                     }
                 }
             }
-        }
+        }*/
     }
 
 

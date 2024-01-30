@@ -120,7 +120,9 @@ class MainActivity : AppCompatActivity(), MealListener {
     }
 
     private fun getRecipies(meals: List<ModelsMeals.Meal>) {
-        val nameMeal = meals.map { it.mealName }
+
+        meals.map { it.mealName }
+
         meals.forEach { meals->
             val nameMeal = meals.mealName
             val img = meals.image
@@ -136,12 +138,12 @@ class MainActivity : AppCompatActivity(), MealListener {
 
         }
 
-        if (mealsList.isNotEmpty()) {
+        /*if (mealsList.isNotEmpty()) {
             mealsList.forEach { meal ->
                 println(meal)
                 //enviar
             }
-        }
+        }*/
     }
 
 
@@ -178,14 +180,36 @@ class MainActivity : AppCompatActivity(), MealListener {
     }
 
     override fun onmealSelected(meal: MealPojo) {
-        Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
 
-        val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
+        val idMeal = meal.getIdMeal().toString()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val call: Response<ModelsMeals.ApiResponseMealDetail> = getRetrofit()
+                .create(APIService::class.java).getMealDetail("lookup.php?i=$idMeal")
+
+            val meal: ModelsMeals.ApiResponseMealDetail? = call.body()
+
+            runOnUiThread {
+                if (call.isSuccessful) {
+
+                   val mealDetail: List<ModelsMeals.MealDetail>? = meal?.mealDetail
+
+                    mealDetail?.forEach { detail->
+                        println(detail.mealName)
+                    }
+                }
+            }
+
+        }
+
+
+        /*val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
 
         supportFragmentManager.beginTransaction()
             .add(R.id.containerMain, frgMealDetail)
             .addToBackStack(null)
-            .commit()
+            .commit()*/
     }
 
 
