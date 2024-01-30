@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(), MealListener {
             }
             false
         }
-        
+
     }
 
     private fun getMeals(category: String?) {
