@@ -89,7 +89,21 @@ class MainActivity : AppCompatActivity(), MealListener {
 
         }
 
+        //Control del bottom navigation
 
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+            it.isChecked =true
+            when(it.itemId){
+                R.id.navigation_home->{
+                    showError("HOME")
+                }
+                R.id.navigation_fav-> {
+                    showError("FAV")
+                }
+            }
+            false
+        }
+        
     }
 
     private fun getMeals(category: String?) {
