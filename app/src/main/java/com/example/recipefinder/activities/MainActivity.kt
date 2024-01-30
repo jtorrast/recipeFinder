@@ -27,12 +27,11 @@ class MainActivity : AppCompatActivity(), MealListener {
 
     private lateinit var binding: ActivityMainBinding
     private val mealsList = mutableListOf<MealPojo>()
+    var tipo: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         if (mealsList.isEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity(), MealListener {
 
                 //ahora falta enviar el string para que complete la url, tendremos que hacer otra consulta a la api para que muestre las recetas
 
-                val tipo = parent?.getItemAtPosition(position) as? String
+                tipo = parent?.getItemAtPosition(position) as? String
                 mealsList.clear()
 
                 getMeals(tipo)
@@ -95,9 +94,16 @@ class MainActivity : AppCompatActivity(), MealListener {
             it.isChecked =true
             when(it.itemId){
                 R.id.navigation_home->{
-                    showError("HOME")
+                    val hayDetalle = supportFragmentManager.findFragmentById(R.id.containerMain)
+
+                    if (hayDetalle != null) {
+                        supportFragmentManager.beginTransaction().remove(hayDetalle).commit()
+                    }
+
                 }
                 R.id.navigation_fav-> {
+
+                    //mostrar un fragment con las recetas favoritas guardadas en la bd
                     showError("FAV")
                 }
             }
@@ -147,7 +153,8 @@ class MainActivity : AppCompatActivity(), MealListener {
             val frgMeals = MealsFragment.newInstance(mealsList)
 
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainerView, frgMeals).commit()
+                .add(R.id.fragmentContainerView, frgMeals)
+                .commit()
             frgMeals.setListener(this)
 
         }
@@ -194,6 +201,14 @@ class MainActivity : AppCompatActivity(), MealListener {
     }
 
     override fun onmealSelected(meal: MealPojo) {
+
+        val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.containerMain, frgMealDetail)
+            .addToBackStack(null)
+            .commit()
+
         //Toast.makeText(this, meal.getIdMeal().toString(), Toast.LENGTH_SHORT).show()
 
         /*val idMeal = meal.getIdMeal().toString()
@@ -217,13 +232,6 @@ class MainActivity : AppCompatActivity(), MealListener {
 
         }*/
 
-
-        val frgMealDetail = MealDetailFragment.newInstance(meal.getIdMeal().toString())
-
-        supportFragmentManager.beginTransaction()
-            .add(R.id.containerMain, frgMealDetail)
-            .addToBackStack(null)
-            .commit()
     }
 
 
